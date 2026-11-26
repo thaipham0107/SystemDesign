@@ -1,0 +1,11 @@
+{
+  "name": "system-design-study-copy",
+  "private": true,
+  "type": "module",
+  "description": "Personal offline study copy of an interactive system design course (see README).",
+  "scripts": {
+    "mirror": "node scripts/mirror.mjs",
+    "start": "node scripts/serve.mjs"
+  },
+  "engines": { "node": ">=18" }
+}

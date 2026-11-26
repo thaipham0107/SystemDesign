@@ -5,7 +5,10 @@
   "description": "Personal offline study copy of an interactive system design course (see README).",
   "scripts": {
     "mirror": "node scripts/mirror.mjs",
+    "build": "node scripts/mirror.mjs && node scripts/postbuild.mjs",
     "start": "node scripts/serve.mjs"
   },
-  "engines": { "node": ">=18" }
+  "engines": {
+    "node": ">=18"
+  }
 }

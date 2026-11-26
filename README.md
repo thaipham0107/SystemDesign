@@ -26,31 +26,29 @@ npm start        # mở http://localhost:4173
 Mẹo: thêm `?lang=vi` vào địa chỉ để học bằng tiếng Việt, ví dụ
 <http://localhost:4173/?lang=vi>. Đổi cổng bằng `PORT=8080 npm start`.
 
-## Xem trên điện thoại: Cloudflare Pages (riêng tư)
+## Xem trên điện thoại: Cloudflare Pages, có đăng nhập
 
-Workflow `.github/workflows/deploy-cloudflare.yml` tự tải trang trong GitHub Actions
-và đưa lên Cloudflare Pages (không commit nội dung gốc vào repo). Nó chạy mỗi lần
-push, mỗi thứ Hai (để cập nhật theo bản gốc), hoặc bấm tay trong tab **Actions**.
+Không cần API token. Cloudflare tự lấy code từ GitHub, tải trang về khi build, và
+`functions/_middleware.js` bắt nhập tài khoản/mật khẩu trước khi xem bất kỳ trang nào.
+Tài khoản/mật khẩu đặt trong Cloudflare, **không** nằm trong repo công khai này.
 
 Làm một lần:
 
-1. **Tạo API token**: Cloudflare dashboard → *My Profile → API Tokens → Create Token*
-   → *Create Custom Token*, quyền **Account → Cloudflare Pages → Edit**.
-2. **Lấy Account ID**: dashboard → *Workers & Pages*, cột bên phải có *Account ID*.
-3. **Thêm vào GitHub**: repo → *Settings → Secrets and variables → Actions*,
-   tạo 2 secret `CLOUDFLARE_API_TOKEN` và `CLOUDFLARE_ACCOUNT_ID`.
-4. **Chạy deploy**: tab *Actions → Deploy to Cloudflare Pages → Run workflow*.
-   Xong sẽ có địa chỉ `https://system-design-study.pages.dev`
-   (nếu tên bị trùng, tạo biến `CF_PAGES_PROJECT` trong *Variables* với tên khác).
-5. **Khoá lại chỉ cho mình bạn** (bắt buộc, vì đây là nội dung của tác giả):
-   *Workers & Pages → system-design-study → Settings → General → Access policy → Enable*.
-   Sau đó vào *Zero Trust → Access → Applications*, sửa ứng dụng vừa tạo:
-   - Thêm cả tên miền chính `system-design-study.pages.dev` (mặc định chỉ khoá bản preview).
-   - Policy: *Allow*, *Include → Emails →* email của bạn.
-   Khi mở trên điện thoại, Cloudflare gửi mã đăng nhập vào email; nhập mã là vào được.
+1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git**,
+   chọn repo `SystemDesign`.
+2. Cấu hình build:
+   - Production branch: `claude/project-thread-ueqx9u` (hoặc `main` nếu sau này gộp vào)
+   - Framework preset: `None`
+   - Build command: `npm run build`
+   - Build output directory: `site`
+3. Mục **Environment variables** (Production), thêm:
+   - `BASIC_USER` = tên đăng nhập
+   - `BASIC_PASS` = mật khẩu (bấm *Encrypt*)
+4. **Save and Deploy**. Xong sẽ có địa chỉ dạng `https://<tên-project>.pages.dev`.
 
-Mẹo trên điện thoại: mở `https://system-design-study.pages.dev/?lang=vi`, rồi
-*Thêm vào màn hình chính* để dùng như một ứng dụng.
+Mở trên điện thoại, trình duyệt hiện hộp đăng nhập; nhập một lần là trình duyệt nhớ.
+Mở `.../?lang=vi` rồi *Thêm vào màn hình chính* để dùng như ứng dụng.
+Muốn đổi mật khẩu: sửa biến `BASIC_PASS` rồi *Retry deployment*.
 
 ## Lưu ý bản quyền
 
